@@ -11,7 +11,7 @@ class Migrator
     Lighthouse.token = options[:lighthouse_token]
     @lighthouse_project = Lighthouse::Project.find(options[:lighthouse_project])
 
-    client = Octokit::Client.new(:login => options[:github_user], :oauth_token => options[:github_token])
+    client = Octokit::Client.new(:login => options[:github_user], :password => options[:github_password])
     @github_repo = client.repository(:user => options[:github_owner], :repo => options[:github_repo])
   end
 
