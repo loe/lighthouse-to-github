@@ -1,3 +1,5 @@
+require_relative 'lib/migrator'
+
 class LighthouseToGithub < Thor
 
   desc "migrate", "migrate Lighthouse Tickets to Github Issues"
@@ -9,6 +11,7 @@ class LighthouseToGithub < Thor
   method_option :github_user, :type => :string, :required => true
   method_option :github_password, :type => :string, :required => true
   def migrate
+    Migrator.new(options).migrate!
   end
 
 end
