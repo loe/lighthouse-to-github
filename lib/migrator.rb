@@ -9,10 +9,15 @@ class Migrator
   def initialize(options)
     Lighthouse.account = options[:lighthouse_account]
     Lighthouse.token = options[:lighthouse_token]
-    @lighthouse_project = Project.find(options[:lighthouse_project])
+    @lighthouse_project = Lighthouse::Project.find(options[:lighthouse_project])
 
-    client = Octokit::Client.new(:login => options[:github_user], :password => options[:github_password])
+    client = Octokit::Client.new(:login => options[:github_user], :oauth_token => options[:github_token])
     @github_repo = client.repository(:user => options[:github_owner], :repo => options[:github_repo])
+  end
+
+  def migrate!
+    puts @lighthouse_project.inspect
+    puts @github_repo.inspect
   end
 
 end

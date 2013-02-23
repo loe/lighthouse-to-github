@@ -1,4 +1,5 @@
-require_relative 'lib/migrator'
+$: << File.expand_path("../lib/", __FILE__)
+require 'migrator'
 
 class LighthouseToGithub < Thor
 
@@ -9,7 +10,7 @@ class LighthouseToGithub < Thor
   method_option :github_owner, :type => :string, :required => true
   method_option :github_repo, :type => :string, :required => true
   method_option :github_user, :type => :string, :required => true
-  method_option :github_password, :type => :string, :required => true
+  method_option :github_token, :type => :string, :required => true
   def migrate
     Migrator.new(options).migrate!
   end
