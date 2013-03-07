@@ -1,3 +1,6 @@
+require 'active_support/all'
+ActiveSupport::XmlMini.backend = 'Nokogiri'
+
 require 'lighthouse'
 require 'octokit'
 
@@ -16,8 +19,8 @@ class Migrator
   end
 
   def migrate!
-    puts @lighthouse_project.inspect
-    puts @github_repo.inspect
+    @lighthouse_project.tickets.find(:all) do |ticket|
+      puts ticket.title
+    end
   end
-
 end

@@ -24,6 +24,7 @@ GEM
     multi_json (1.6.1)
     multipart-post (1.1.5)
     netrc (0.7.7)
+    nokogiri (1.5.6)
     octokit (1.23.0)
       addressable (~> 2.2)
       faraday (~> 0.8)
@@ -38,5 +39,6 @@ PLATFORMS
 
 DEPENDENCIES
   lighthouse
+  nokogiri
   octokit
   thor
