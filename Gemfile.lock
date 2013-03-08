@@ -1,28 +1,28 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    activemodel (3.2.12)
-      activesupport (= 3.2.12)
+    activemodel (3.1.11)
+      activesupport (= 3.1.11)
       builder (~> 3.0.0)
-    activeresource (3.2.12)
-      activemodel (= 3.2.12)
-      activesupport (= 3.2.12)
-    activesupport (3.2.12)
       i18n (~> 0.6)
+    activeresource (3.1.11)
+      activemodel (= 3.1.11)
+      activesupport (= 3.1.11)
+    activesupport (3.1.11)
       multi_json (~> 1.0)
     addressable (2.3.3)
     builder (3.0.4)
-    faraday (0.8.5)
+    faraday (0.8.6)
       multipart-post (~> 1.1)
     faraday_middleware (0.9.0)
       faraday (>= 0.7.4, < 0.9)
     hashie (1.2.0)
-    i18n (0.6.1)
+    i18n (0.6.4)
     lighthouse (2.1.0)
       activeresource (>= 3.0.0)
       activesupport (>= 3.0.0)
     multi_json (1.6.1)
-    multipart-post (1.1.5)
+    multipart-post (1.2.0)
     netrc (0.7.7)
     nokogiri (1.5.6)
     octokit (1.23.0)
@@ -38,6 +38,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activesupport (~> 3.1.0)
   lighthouse
   nokogiri
   octokit
