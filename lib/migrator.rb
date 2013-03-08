@@ -1,8 +1,7 @@
 require 'active_support/all'
-ActiveSupport::XmlMini.backend = 'Nokogiri'
-
 require 'lighthouse'
 require 'octokit'
+ActiveSupport::XmlMini.backend = 'Nokogiri'
 
 class Migrator
 
@@ -19,8 +18,38 @@ class Migrator
   end
 
   def migrate!
-    @lighthouse_project.tickets.find(:all) do |ticket|
-      puts ticket.title
+    tickets = load_lighthouse_tickets(11)
+
+    tickets.each do |t|
+      ticket = Lighthouse::Ticket.find(t.number, :params => {:project_id => @lighthouse_project.id})
+      main = ticket.versions.shift
+
+      asignee = ticket.versions.last.assigned_user_name if ticket.versions.last.assigned_user_name
+      title = ticket.title
+      body = main.body
+
+
+      puts "ID: #{ticket.number}"
+      puts "Asignee: #{asignee}"
+      puts "Title: #{title}"
+      puts "Labels: #{ticket.tags.join(', ')}"
+      puts "Body: #{body}"
+      ticket.versions.each do |version|
+        puts "Comment (#{version.creator_name}): #{version.body}" if version.body.present?
+      end
+      puts "\n\n"
     end
   end
+
+  def load_lighthouse_tickets(page = 1)
+    tickets = []
+    begin
+      page_of_tickets = @lighthouse_project.tickets(:page => page)
+      tickets += page_of_tickets
+      page += 1
+    end while page_of_tickets.size > 0
+
+    tickets
+  end
+
 end
