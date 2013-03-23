@@ -51,15 +51,16 @@ class Migrator
       ticket = Lighthouse::Ticket.find(t.number, :params => {:project_id => @lighthouse_project.id})
       main = ticket.versions.shift
 
-      assignee = ticket.assigned_user_name if ticket.assigned_user_name
+      assignee = @assignee_map[main.assigned_user_name] if main.assigned_user_id
+      milestone = @milestone_map[main.milestone_title] if main.milestone_id
       title = ticket.title
       body = main.body
 
-      puts "Creating ticket: #{title} (#{@assignee_map[assignee]})"
+      puts "Creating ticket: #{title}"
       begin
         issue = @github_client.create_issue(@github_repo, title, body, {
-          :milestone => @milestone_map[ticket.milestone_title],
-          :assignee => @assignee_map[assignee],
+          :milestone => milestone,
+          :assignee => assignee,
           :labels => ticket.tags.map { |tag| {:name => tag} }
         })
 
