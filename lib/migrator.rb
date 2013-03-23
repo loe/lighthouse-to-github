@@ -69,7 +69,7 @@ class Migrator
 
         ticket.versions.each do |version|
           if version.body.present? && !version.body =~ /\(from \[/i
-            @github_client.add_comment(@github_repo, issue.number, "#{version.creator_name}:\n\n#{version.body}")
+            @github_client.add_comment(@github_repo, issue.number, "@#{@assignee_map[version.creator_name]}:\n\n#{version.body}")
           end
         end
       rescue Octokit::InternalServerError
