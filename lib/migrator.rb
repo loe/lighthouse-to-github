@@ -51,7 +51,7 @@ class Migrator
       ticket = Lighthouse::Ticket.find(t.number, :params => {:project_id => @lighthouse_project.id})
       main = ticket.versions.shift
 
-      assignee = ticket.versions.last.assigned_user_name if ticket.versions.last.assigned_user_name
+      assignee = ticket.assigned_user_name if ticket.assigned_user_name
       title = ticket.title
       body = main.body
 
