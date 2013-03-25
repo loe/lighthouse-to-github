@@ -7,7 +7,7 @@ class Migrator
   CLOSED_TICKET_STATES = ['resolved', 'invalid']
 
   attr_accessor :lighthouse_project
-  attr_accessor :github_client, :github_repo
+  attr_accessor :github_client, :github_repo, :github_owner
 
   attr_accessor :milestone_map
 
@@ -17,22 +17,29 @@ class Migrator
     @lighthouse_project = Lighthouse::Project.find(options[:lighthouse_project])
 
     @github_client = Octokit::Client.new(:login => options[:github_user], :password => options[:github_password], :oauth_token => options[:github_token])
+    @github_owner = options[:github_owner]
     @github_repo = "#{options[:github_owner]}/#{options[:github_repo]}"
 
     @milestone_map = {}
-    @assignee_map = {
-      'Brandon Caplan' => 'bcaplan',
-      'Brian Moran' => 'bmo',
-      'Brian Warren' => 'good',
-      'Charles Mount' => 'cmount',
-      'Leigh Caplan' => 'texel',
-      'Matthew Anderson' => 'WanderingMatt',
-      'Onehub' => 'onehub-dev', 
-      'W. Andrew Loe III' => 'loe'
-    }
+    @assignee_map = {}
   end
 
   def migrate!
+    assignees!
+    milestones!
+    tickets!
+  end
+
+  def assignees!
+    @assignee_map = @github_client.organization_members(@github_owner).inject({}) do |m, member|
+      user = @github_client.user(member.login)
+      m[user.name] = member.login
+
+      m
+    end
+  end
+
+  def milestones!
     milestones = load_lighthouse_milestones
 
     @milestone_map = milestones.inject(@milestone_map) do |m, lh_milestone|
@@ -43,7 +50,9 @@ class Migrator
 
       m
     end
+  end
 
+  def tickets!
     tickets = load_lighthouse_tickets
     tickets.sort_by! { |t| t.number }
 
